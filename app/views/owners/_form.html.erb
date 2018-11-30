@@ -1,0 +1,83 @@
+<script>
+    function initMap() {
+        var input = document.getElementById('query');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        // Set the data fields to return when the user selects a place.
+        autocomplete.setFields(
+            ['address_components', 'geometry', 'icon', 'name']);
+
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            $('#owner_latitude').val(place.geometry.location.lat());
+            $('#owner_longitude').val(place.geometry.location.lng());
+
+            //location.href = "/search?lat="+lat+"&lng="+lng+"&address="+address;
+        });
+    }
+</script>
+<div class="row">
+  <div class="col-md-4 offset-md-4 white-panel">
+    <h3>Parkinglot Form</h3>
+<%= form_with(model: owner, local: true) do |form| %>
+  <% if owner.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(owner.errors.count, "error") %> prohibited this owner from being saved:</h2>
+
+      <ul>
+      <% owner.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :name %>
+    <%= form.text_field :name , class: 'form-control'%>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :address %>
+    <input id="query" type="text" placeholder="Enter a location" class= 'form-control'>
+    <%= form.hidden_field :latitude %>
+    <%= form.hidden_field :longitude %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :mobile %>
+    <%= form.text_field :mobile, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :no_of_parking %>
+    <%= form.text_field :no_of_parking, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :price %>
+    <%= form.text_field :price, class: 'form-control' %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Register", class: 'btn btn-primary' %>
+  </div>
+<% end %>
+</div>
+</div>
