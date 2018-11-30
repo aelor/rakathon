@@ -1,0 +1,91 @@
+<script>
+    function initMap() {
+        var input = document.getElementById('query');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        // Set the data fields to return when the user selects a place.
+        autocomplete.setFields(
+            ['address_components', 'geometry', 'icon', 'name']);
+
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+
+            var address = '';
+            console.log(place);
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            var lat = place.geometry.location.lat();
+            var lng = place.geometry.location.lng();
+
+            location.href = "/search?lat="+lat+"&lng="+lng+"&address="+address;
+        });
+    }
+</script>
+<div class="container-fluid">
+  <input id="query" value="<%= params[:address]%>" />
+  <div class="row">
+    <div class="col-md-3">
+      things may go here
+    </div>
+    <div class="col-lg-9">
+      <div id="map" style="width: 100%; height: 400px; background: grey"></div>
+    </div>
+  </div>
+</div>
+<input id="lat" type="hidden" value=<%= params[:lat] %> />
+<input id="lng" type="hidden" value=<%= params[:lng] %> />
+<style>
+  div#map{
+    height: 500px;
+  }
+</style>
+<script>
+    function addMarkersToMap(map) {
+        var lat = document.getElementById('lat').value;
+        var lng = document.getElementById('lng').value;
+        var currentLocation = new H.map.Marker({lat: lat, lng: lng});
+        map.addObject(currentLocation);
+        map.setCenter({lat: lat, lng: lng});
+        map.setZoom(14);
+    }
+
+    var platform = new H.service.Platform({
+        app_id: 'O6wvLnpoWWZUhQdvbCKs',
+        app_code: 'qsEnIY2HId-eVLmTaX4YGQ',
+        useHTTPS: true
+    });
+    var pixelRatio = window.devicePixelRatio || 1;
+    var defaultLayers = platform.createDefaultLayers({
+        tileSize: pixelRatio === 1 ? 256 : 512,
+        ppi: pixelRatio === 1 ? undefined : 320
+    });
+
+    //Step 2: initialize a map - this map is centered over Europe
+    var map = new H.Map(document.getElementById('map'),
+        defaultLayers.normal.map,{
+            center: {lat:50, lng:5},
+            zoom: 4,
+            pixelRatio: pixelRatio
+        });
+
+    //Step 3: make the map interactive
+    // MapEvents enables the event system
+    // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+    var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+    // Create the default UI components
+    var ui = H.ui.UI.createDefault(map, defaultLayers);
+    addMarkersToMap(map);
+</script>

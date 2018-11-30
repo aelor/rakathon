@@ -13,4 +13,14 @@
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
+//= require jquery-3.3.1
 //= require_tree .
+
+var activateLocateMe = function(){
+    $('#locateMe').click(function(){
+        console.log('located');
+    })
+}
+$(function(){
+    activateLocateMe();
+});

@@ -24,3 +24,42 @@ body{
     padding: 30px !important;
     border: 1px solid #ccc;
 }
+.white-header{
+    color: #ffffff;
+    font-weight: 900;
+    margin-bottom: 32px;
+    text-shadow: 0 1px 2px #383850;
+}
+.center{
+    text-align: center;
+}
+#query{
+    border: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    display: table-cell;
+    vertical-align: top;
+    width: 100%;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    border: 1px solid #bfbfbf;
+    border-radius: 4px;
+    height: 48px;
+    padding: 0 35px;
+}
+#query + i{
+    position: absolute;
+    color: #cccccc;
+    left: 10px;
+    top: 12px;
+    font-size: 25px;
+}
+.form-group{
+    position: relative;
+}
+a#locateMe {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 20px;
+}

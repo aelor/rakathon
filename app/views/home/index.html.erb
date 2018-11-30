@@ -1,2 +1,50 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<script>
+    function initMap() {
+        var input = document.getElementById('query');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        // Set the data fields to return when the user selects a place.
+        autocomplete.setFields(
+            ['address_components', 'geometry', 'icon', 'name']);
+
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+
+            var address = '';
+            console.log(place);
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            var lat = place.geometry.location.lat();
+            var lng = place.geometry.location.lng();
+
+            location.href = "/search?lat="+lat+"&lng="+lng+"&address="+address;
+        });
+    }
+</script>
+<div class="row">
+  <div class="col-md-6 offset-md-3 center">
+    <h1 class="white-header">Find my parking</h1>
+    <%= form_tag "/search" do %>
+      <div class="form-group">
+        <%= text_field_tag :q, nil,  id: 'query' %>
+        <i class="fa fa-map-marker"></i>
+        <a href="javascript:void(0);" id="locateMe"><i class="fa fa-crosshairs"></i></a>
+      </div>
+      <div class="form-group">
+        <button type="button" class="btn btn-success btn-lg">Find parking now !</button>
+      </div>
+    <% end %>
+  </div>
+</div>
