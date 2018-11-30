@@ -43,8 +43,7 @@ body{
     background-color: #ffffff;
     box-sizing: border-box;
     border: 1px solid #bfbfbf;
-    border-radius: 4px;
-    height: 48px;
+    height: 50px;
     padding: 0 35px;
 }
 #query + i{
@@ -62,4 +61,15 @@ a#locateMe {
     top: 8px;
     right: 10px;
     font-size: 20px;
+}
+.sidelist{
+    background-color: rgb(243, 243, 244);
+}
+.sideitem{
+    margin: 15px auto;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(225, 225, 228);
+    border-image: initial;
+    padding: 20px 8.33333%;
 }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OnlineParking</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'https://bootswatch.com/4/flatly/bootstrap.min.css' %>
+  <%= stylesheet_link_tag '//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoU5APm4A2jFN0Fwnvvm9oqrCMJmkjn7I&libraries=places&callback=initMap"
+          async defer></script>
+  <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1542186754" />
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+</head>
+
+<body>
+<%= yield %>
+</body>
+</html>
