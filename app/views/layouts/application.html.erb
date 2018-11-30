@@ -6,31 +6,54 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= stylesheet_link_tag '//maxcdn.bootstrapcdn.com/bootswatch/3.3.6/paper/bootstrap.min.css' %>
+    <%= stylesheet_link_tag 'https://bootswatch.com/4/flatly/bootstrap.min.css' %>
     <%= stylesheet_link_tag '//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
 <body>
-<div class = "navbar navbar-default navbar-fixed-top" >
-  <div class = "container">
-        <div class ="navbar-header">
-          <a class = "navbar-brand(href="/")> Control <i class="fa fa-globe"></i> Kaos
-          <button class = "navbar-toggle(type="button"){data: { toggle: "collapse", target: "#navbar-main" }}">
-            <span class ="icon-bar"/>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">
+    Parky
+  </a>
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Register your parking</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Features</a>
+      </li>
+    </ul>
 
-<% if user_signed_in? %>
-  Logged in as <strong><%= current_user.email %></strong>.
-  <%= link_to 'Edit profile', edit_user_registration_path %> |
-  <%= link_to "Logout", destroy_user_session_path, method: :delete %>
-<% else %>
-  <%= link_to "Sign up", new_user_registration_path %> |
-  <%= link_to "Login", new_user_session_path %>
-<% end %>
-</div>
-
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <%= yield %>
+    <% if user_signed_in? %>
+      <ul class="nav navbar-nav navbar-left">
+        <li>
+          Logged in as <strong><%= current_user.email %></strong>.
+          <%= link_to 'Edit profile', edit_user_registration_path %>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
+      </ul>
+    <% else %>
+      <ul class="nav navbar-nav navbar-left">
+        <li class="nav-item">
+          <%= link_to "Sign up", new_user_registration_path, class: "nav-link"%>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+          <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+        </li>
+      </ul>
+    <% end %>
+  </div>
+</nav>
+    <div class="container">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+      <%= yield %>
+    </div>
   </body>
 </html>

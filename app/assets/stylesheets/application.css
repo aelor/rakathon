@@ -13,3 +13,14 @@
  *= require_tree .
  *= require_self
  */
+
+body{
+    background: url("/assets/background.jpg");
+    background-size: cover;
+}
+
+.white-panel{
+    background: rgba(256, 256, 256, 0.9);
+    padding: 30px !important;
+    border: 1px solid #ccc;
+}
