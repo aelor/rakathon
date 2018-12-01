@@ -39,11 +39,15 @@
     <i class="fa fa-map-marker"></i>
     <div class="col-md-3 sidelist">
       <% @search_records.each do |sr| %>
+        <% @current_location = @lat,@len %>
         <div class="sideitem card">
           Name: <%= sr.name %><br />
           Address: <%= sr.address %><br />
           Price: <%= sr.price %><br />
-          Distance from you: <%  %>
+          Distance from you: <%= get_distance(@current_location,sr.latitude, sr.longitude) %>km
+         <div class="actions">
+         <button name="button" type="submit" class= 'btn btn-primary book-button'>Book Now</button>
+        </div>
         </div>
       <% end %>
     </div>
@@ -103,3 +107,9 @@
     var ui = H.ui.UI.createDefault(map, defaultLayers);
     addMarkersToMap(map);
 </script>
+
+<style type="text/css">
+    .book-button{
+        margin-left: 242px;
+    }
+</style>
