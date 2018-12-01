@@ -25,16 +25,6 @@ ActiveRecord::Schema.define(version: 2018_12_01_053008) do
     t.integer "user_id"
   end
 
-  create_table "parkinglots", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "name"
-    t.text "address"
-    t.string "mobile"
-    t.string "no_of_parking"
-    t.string "price"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "parkings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "user_id"
     t.integer "parking_space_id"

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get 'home/index'
-  resources :owners
+  resources :parking_spaces
   devise_for :users
 	 root to: "home#index"
 

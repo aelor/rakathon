@@ -1,4 +1,4 @@
-module OwnersHelper
+module ParkingSpacesHelper
 
 def get_distance(cur_location,lat, len)
   obj1 = cur_location
