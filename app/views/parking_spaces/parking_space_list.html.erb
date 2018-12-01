@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-4 offset-md-4 white-panel">
+  	<h3> Parking Lists </h3>
+      <% @parking_lists.each do |pl| %>
+        <div class="sideitem card animated fadeInUpBig">
+          Name: <%= pl.name %><br />
+          Address: <%= pl.address %><br />
+          Mobile: <%= pl.mobile %><br />
+        </div>
+
+        <table class="qr-code">
+<% @qr.modules.each_index do |x| %>
+  <tr>
+  <% @qr.modules.each_index do |y| %>
+   <% if @qr.dark?(x,y) %>
+    <td class="black"/>
+   <% else %>
+    <td class="white"/>
+   <% end %>
+  <% end %>
+  </tr>
+<% end %>
+</table>
+
+      <% end %>
+
+
+
+  </div>
+</div>

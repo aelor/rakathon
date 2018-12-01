@@ -34,6 +34,8 @@
 </script>
 <div class="row">
   <div class="col-md-4 offset-md-4 white-panel">
+<%if current_user%>
+
     <h3>Parkinglot Form</h3>
 <%= form_with(model: @parking_space, local: true) do |form| %>
   <% if @parking_space.errors.any? %>
@@ -80,5 +82,10 @@
     <%= form.submit "Register", class: 'btn btn-primary' %>
   </div>
 <% end %>
+
+<%else%>
+<%= link_to 'Login and Register your parking', new_user_session_path, class: 'btn btn-primary' %>
+<%end%>
+
 </div>
 </div>

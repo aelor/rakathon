@@ -1,3 +1,4 @@
+require 'rqrcode'
 class ParkingSpacesController < ApplicationController
   before_action :set_owner, only: [:show, :edit, :update, :destroy]
 
@@ -21,6 +22,15 @@ class ParkingSpacesController < ApplicationController
   def edit
   end
 
+  def get_parking_space
+    params[:id] = 4
+    @qr = RQRCode::QRCode.new( SecureRandom.hex(2), size: 4)
+    @user = User.where(id: params[:id]).first if params[:id]
+    if @user
+      @parking_lists = @user.parking_spaces
+    end
+     render template: "/parking_spaces/parking_space_list"  
+  end
   # POST /parking_spaces
   # POST /parking_spaces.json
   def create
