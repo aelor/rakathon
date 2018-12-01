@@ -23,6 +23,7 @@ body{
     background: rgba(256, 256, 256, 0.9);
     padding: 30px !important;
     border: 1px solid #ccc;
+    margin: 20px auto;
 }
 .white-header{
     color: #ffffff;
@@ -30,8 +31,14 @@ body{
     margin-bottom: 32px;
     text-shadow: 0 1px 2px #383850;
 }
+.actions{
+    margin-top: 10px;
+}
 .center{
     text-align: center;
+}
+.right{
+    text-align: right;
 }
 #query{
     border: none;
@@ -72,4 +79,14 @@ a#locateMe {
     border-color: rgb(225, 225, 228);
     border-image: initial;
     padding: 20px 8.33333%;
+}
+
+.H_ib_body {
+    background: cornflowerblue !important;
+    font-size: 14px !important;
+    padding: 10px !important;
+    min-width: 150px !important;
+}
+.bubble{
+
 }
