@@ -67,8 +67,26 @@
         var currentLocation = new H.map.Marker({lat: lat, lng: lng}, {icon: icon});
         map.addObject(currentLocation);
         <% @search_records.each_with_index do |sr, i| %>
+          var html = '<div><%= sr.name %>' +
+              '<%= sr.address %>' +
+              '<%= sr.try(:distance) %>' +
+              '<button class="btn btn-primary">BOOK NOW</button>';
+          ;
           var x = new H.map.Marker({lat: "<%= sr.latitude %>", lng: "<%= sr.longitude %>"}, {icon: parkingicon});
+          x.setData(html);
           map.addObject(x);
+          x.addEventListener('tap', function (evt) {
+            console.log("<%= sr.latitude %>", "<%= sr.longitude %>");
+            var w0 = 'geo!'+lat+','+lng;
+            var w1 = 'geo!'+"<%= sr.latitude %>"+','+"<%= sr.longitude %>";
+
+            var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+                content: evt.target.getData()
+            });
+            // show info bubble
+            ui.addBubble(bubble);
+            plotRoute(w0, w1);
+          });
         <% end %>
 
         map.setCenter({lat: lat, lng: lng});
@@ -102,4 +120,64 @@
     // Create the default UI components
     var ui = H.ui.UI.createDefault(map, defaultLayers);
     addMarkersToMap(map);
+
+    var routeLine;
+    function plotRoute(w0, w1){
+
+        console.log(routeLine !== undefined);
+        if (routeLine !== undefined){
+            map.removeObject(routeLine);
+        }
+        var routingParameters = {
+            // The routing mode:
+            'mode': 'fastest;car',
+            // The start point of the route:
+            'waypoint0': w0,
+            // The end point of the route:
+            'waypoint1': w1,
+            // To retrieve the shape of the route we choose the route
+            // representation mode 'display'
+            'representation': 'display'
+        };
+
+// Define a callback function to process the routing response:
+        var onResult = function(result) {
+            // map.removeObject(routeLine);
+            var route,
+                routeShape,
+                linestring;
+            if(result.response.route) {
+                // Pick the first route from the response:
+                route = result.response.route[0];
+                // Pick the route's shape:
+                routeShape = route.shape;
+
+                // Create a linestring to use as a point source for the route line
+                linestring = new H.geo.LineString();
+
+                // Push all the points in the shape into the linestring:
+                routeShape.forEach(function(point) {
+                    var parts = point.split(',');
+                    linestring.pushLatLngAlt(parts[0], parts[1]);
+                });
+
+                // Create a polyline to display the route:
+                routeLine = new H.map.Polyline(linestring, {
+                    style: { strokeColor: 'blue', lineWidth: 5 }
+                });
+
+                // Add the route polyline and the two markers to the map:
+                map.addObjects([routeLine]);
+
+                // Set the map's viewport to make the whole route visible:
+                map.setViewBounds(routeLine.getBounds());
+            }
+        };
+
+        var router = platform.getRoutingService();
+        router.calculateRoute(routingParameters, onResult,
+            function(error) {
+                alert(error.message);
+            });
+    }
 </script>
