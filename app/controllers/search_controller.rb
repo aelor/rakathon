@@ -4,7 +4,7 @@ class SearchController < ApplicationController
   def index
   	@lat = params[:lat] 
   	@len = params[:lng] 
-  	@search_records = Owner.within(5,:units => :kms,:origin => [@lat,@len], :formula => :sphere)
+  	@search_records = ParkingSpace.within(5,:units => :kms,:origin => [@lat,@len], :formula => :sphere)
   end
 
   def parking_lot
