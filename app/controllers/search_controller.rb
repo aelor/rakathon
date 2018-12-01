@@ -8,7 +8,12 @@ class SearchController < ApplicationController
   end
 
   def parking_lot
-  	
   end
-  
+
+  def stop_parking
+  end
+
+  def cancel_booking
+  end
+
 end

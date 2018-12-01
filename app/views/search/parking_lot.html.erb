@@ -3,6 +3,11 @@
   	<h3>Thank you for booking online parking. Now your time is started.Please go and park your car in booking address.</h3>
 <div id="clock"></div>
 
+
+<div class="actions">
+  <a href="/search/stop_parking" class="btn btn-primary book-button">End Parking Space</a>
+  <a href="/search/cancel_booking" class="btn btn-primary book-button">Cancel Booking</a>
+ </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 <script type="text/javascript">
@@ -32,7 +37,7 @@ function updateClock (){
   	// Compose the string for display
   	var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
   	
-  	
+  	console.log(currentTimeString);
    	$("#clock").html(currentTimeString);	  	
  }
 </script>
