@@ -16,8 +16,17 @@
 //= require_tree .
 
 var activateLocateMe = function(){
-    $('#locateMe').click(function(){
-        console.log('located');
+    $('#locateMe').click(function(e){
+        e.preventDefault();
+        navigator.geolocation.getCurrentPosition(
+            function( position ){ // success cb
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                location.href = "/search?lat="+lat+"&lng="+lng+"&address=My location";
+            },
+            function(){ // fail cb
+            }
+        );
     })
 };
 

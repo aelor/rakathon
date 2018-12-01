@@ -39,15 +39,22 @@
     <i class="fa fa-map-marker"></i>
     <div class="col-md-3 sidelist">
       <% @search_records.each do |sr| %>
-        <% @current_location = @lat,@len %>
-        <div class="sideitem card">
+        <% @current_location = @lat, @len %>
+        <div class="sideitem card animated fadeInUpBig">
           Name: <%= sr.name %><br />
           Address: <%= sr.address %><br />
           Price: <%= sr.price %><br />
-          Distance from you: <%= get_distance(@current_location,sr.latitude, sr.longitude) %>km
-         <div class="actions">
-         <a href="/search/parking_lot" class="btn btn-primary book-button">Book Now</a>
+          Distance from you: <%= sr.distance_from(@current_location) %>km
+          <div class="actions right">
+            <a href="/search/parking_lot" class="btn btn-primary book-button">Book Now</a>
+          </div>
         </div>
+      <% end %>
+      <% if @search_records.length == 0 %>
+        <div class="white-panel center">
+          <%= image_tag "noresults.png" %><br/>
+          <h4>No results found.</h4>
+          <p>We love your excitement but we haven't reached there yet. Try searching for a location in and around Bengaluru</p>
         </div>
       <% end %>
     </div>
@@ -62,6 +69,7 @@
 <input id="lng" type="hidden" value=<%= params[:lng] %> />
 <script>
     function addMarkersToMap(map) {
+        var visibleItems = [];
         var lat = document.getElementById('lat').value;
         var lng = document.getElementById('lng').value;
         var carmarker = 'assets/car.svg';
@@ -70,13 +78,16 @@
         var parkingicon = new H.map.Icon(parkmarker, {size: {w: 46, h: 46}});
         var currentLocation = new H.map.Marker({lat: lat, lng: lng}, {icon: icon});
         map.addObject(currentLocation);
+        visibleItems.push(currentLocation);
         <% @search_records.each_with_index do |sr, i| %>
-          var html = '<div><%= sr.name %>' +
-              '<%= sr.address %>' +
-              '<%= sr.try(:distance) %>' +
-              '<button class="btn btn-primary">BOOK NOW</button>';
+          var html = '<div class="bubble"><%= sr.name %><br />' +
+              '<%= sr.address %><br/>' +
+              '<%= sr.distance_from(@current_location) %> kms away <br/>' +
+              '<hr/>'+
+              '<button class="btn btn-primary btn-sm">BOOK NOW</button>';
           ;
           var x = new H.map.Marker({lat: "<%= sr.latitude %>", lng: "<%= sr.longitude %>"}, {icon: parkingicon});
+          visibleItems.push(x);
           x.setData(html);
           map.addObject(x);
           x.addEventListener('tap', function (evt) {
@@ -93,8 +104,14 @@
           });
         <% end %>
 
-        map.setCenter({lat: lat, lng: lng});
-        map.setZoom(15);
+        group = new H.map.Group();
+        group.addObjects(visibleItems);
+        map.addObject(group);
+        map.setViewBounds(group.getBounds());
+
+        // map.setCenter({lat: lat, lng: lng});
+        //
+        map.setZoom(16);
     }
 
     var platform = new H.service.Platform({
@@ -108,7 +125,6 @@
         ppi: pixelRatio === 1 ? undefined : 320
     });
 
-    //Step 2: initialize a map - this map is centered over Europe
     var map = new H.Map(document.getElementById('map'),
         defaultLayers.normal.map,{
             center: {lat:50, lng:5},
@@ -167,7 +183,7 @@
 
                 // Create a polyline to display the route:
                 routeLine = new H.map.Polyline(linestring, {
-                    style: { strokeColor: 'blue', lineWidth: 5 }
+                    style: { strokeColor: 'cornflowerblue', lineWidth: 5 }
                 });
 
                 // Add the route polyline and the two markers to the map:
@@ -185,9 +201,3 @@
             });
     }
 </script>
-
-<style type="text/css">
-    .book-button{
-        margin-left: 242px;
-    }
-</style>
