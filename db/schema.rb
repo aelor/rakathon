@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_01_053008) do
+ActiveRecord::Schema.define(version: 2018_12_01_061352) do
+
+  create_table "journeys", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "from_lat"
+    t.string "from_lng"
+    t.string "to_lat"
+    t.string "to_lng"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.integer "parking_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "parking_spaces", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"

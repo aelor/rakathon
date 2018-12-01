@@ -1,0 +1,120 @@
+<div class="row">
+  <div class="col-md-8 offset-md-2 white-panel">
+    <h3>Booking confirmed</h3>
+    <p>Drive to the designated parking space and scan the qr code at the parking lot to park your vehicle</p>
+    <div class="panel panel-default">
+      <div class="panel-heading">Parking details</div>
+      <div class="panel-body">
+        Address: <%= @ps.address %><br/>
+        Phone: <%= @ps.mobile %>
+      </div>
+    </div>
+    <div id="map" style="width: 100%; height: 300px;"></div>
+    <div id="clock">
+      Parking timer started at: <%= @journey.started_at.strftime("%d-%m-%y, %I:%M %P") %>
+    </div>
+    <div class="total">
+      ₹<%= @total %>/-
+    </div>
+
+    <div class="actions">
+      <a href="/search/stop_parking?parking=<%= params[:id] %>" class="btn btn-primary book-button">Exit parking</a>
+    </div>
+  </div>
+</div>
+<script>
+    var platform = new H.service.Platform({
+        app_id: 'O6wvLnpoWWZUhQdvbCKs',
+        app_code: 'qsEnIY2HId-eVLmTaX4YGQ',
+        useHTTPS: true
+    });
+    var pixelRatio = window.devicePixelRatio || 1;
+    var defaultLayers = platform.createDefaultLayers({
+        tileSize: pixelRatio === 1 ? 256 : 512,
+        ppi: pixelRatio === 1 ? undefined : 320
+    });
+
+    var map = new H.Map(document.getElementById('map'),
+        defaultLayers.normal.map,{
+            center: {lat:50, lng:5},
+            zoom: 4,
+            pixelRatio: pixelRatio
+        });
+
+    var routeLine;
+    function plotRoute(w0, w1){
+
+        console.log(routeLine !== undefined);
+        if (routeLine !== undefined){
+            map.removeObject(routeLine);
+        }
+        var routingParameters = {
+            // The routing mode:
+            'mode': 'fastest;car',
+            // The start point of the route:
+            'waypoint0': w0,
+            // The end point of the route:
+            'waypoint1': w1,
+            // To retrieve the shape of the route we choose the route
+            // representation mode 'display'
+            'representation': 'display'
+        };
+
+// Define a callback function to process the routing response:
+        var onResult = function(result) {
+            // map.removeObject(routeLine);
+            var route,
+                routeShape,
+                linestring;
+            if(result.response.route) {
+                // Pick the first route from the response:
+                route = result.response.route[0];
+                // Pick the route's shape:
+                routeShape = route.shape;
+
+                // Create a linestring to use as a point source for the route line
+                linestring = new H.geo.LineString();
+
+                // Push all the points in the shape into the linestring:
+                routeShape.forEach(function(point) {
+                    var parts = point.split(',');
+                    linestring.pushLatLngAlt(parts[0], parts[1]);
+                });
+
+                // Create a polyline to display the route:
+                routeLine = new H.map.Polyline(linestring, {
+                    style: { strokeColor: 'cornflowerblue', lineWidth: 5 }
+                });
+
+                // Add the route polyline and the two markers to the map:
+                map.addObjects([routeLine]);
+
+                // Set the map's viewport to make the whole route visible:
+                map.setViewBounds(routeLine.getBounds());
+            }
+        };
+
+        var router = platform.getRoutingService();
+        router.calculateRoute(routingParameters, onResult,
+            function(error) {
+                alert(error.message);
+            });
+    }
+    var w0 = 'geo!'+"<%= @journey.from_lat %>"+','+"<%= @journey.from_lng %>";
+    var w1 = 'geo!'+"<%= @ps.latitude %>"+','+"<%= @ps.longitude %>";
+    plotRoute(w0, w1);
+    function addMarkers() {
+        var carmarker = '/assets/car.svg';
+        var parkmarker = '/assets/marker.svg';
+        var carIcon = new H.map.Icon(carmarker, {size: {w: 56, h: 56}});
+        var parkIcon = new H.map.Icon(parkmarker, {size: {w: 46, h: 46}});
+        var currentLocation = new H.map.Marker({lat: "<%= @journey.from_lat %>", lng: "<%= @journey.from_lng %>"}, {icon: carIcon});
+        map.addObject(currentLocation);
+
+        var destination = new H.map.Marker({lat: "<%= @ps.latitude %>", lng: "<%= @ps.longitude %>"}, {icon: parkIcon});
+        map.addObject(destination);
+    }
+    addMarkers();
+
+
+</script>

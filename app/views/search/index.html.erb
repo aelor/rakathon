@@ -46,7 +46,7 @@
           Price: <%= sr.price %><br />
           Distance from you: <%= sr.distance_from(@current_location) %>km
           <div class="actions right">
-            <a href="/search/parking_lot" class="btn btn-primary book-button">Book Now</a>
+            <a href="/book/parking/<%= sr.id %>?lat=<%= params[:lat] %>&lng=<%= params[:lng] %>" class="btn btn-primary book-button">Book Now</a>
           </div>
         </div>
       <% end %>
@@ -84,7 +84,7 @@
               '<%= sr.address %><br/>' +
               '<%= sr.distance_from(@current_location) %> kms away <br/>' +
               '<hr/>'+
-              '<button class="btn btn-primary btn-sm">BOOK NOW</button>';
+              '<a href="/book/parking/<%= sr.id %>?lat=<%= params[:lat] %>&lng=<%= params[:lng] %>" class="btn btn-primary book-button">Book Now</a>';
           ;
           var x = new H.map.Marker({lat: "<%= sr.latitude %>", lng: "<%= sr.longitude %>"}, {icon: parkingicon});
           visibleItems.push(x);
@@ -111,7 +111,7 @@
 
         // map.setCenter({lat: lat, lng: lng});
         //
-        map.setZoom(16);
+        // map.setZoom(16);
     }
 
     var platform = new H.service.Platform({
