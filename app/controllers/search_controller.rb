@@ -7,4 +7,8 @@ class SearchController < ApplicationController
   	@search_records = Owner.within(5,:units => :kms,:origin => [@lat,@len], :formula => :sphere)
   end
 
+  def parking_lot
+  	
+  end
+  
 end

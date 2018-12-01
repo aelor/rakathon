@@ -46,7 +46,7 @@
           Price: <%= sr.price %><br />
           Distance from you: <%= get_distance(@current_location,sr.latitude, sr.longitude) %>km
          <div class="actions">
-         <button name="button" type="submit" class= 'btn btn-primary book-button'>Book Now</button>
+         <a href="/search/parking_lot" class="btn btn-primary book-button">Book Now</a>
         </div>
         </div>
       <% end %>
